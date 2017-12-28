@@ -5,8 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 
+
 class RegisterController extends Controller
 {
+    public function __construct(){
+
+        $this->middleware('guest');
+        $this->middleware('checkAge')->only('store');
+    }
     public function create(){
         return view('register.create');
     }
@@ -26,6 +32,8 @@ class RegisterController extends Controller
         $user->save();
 
         auth()->login($user);
+
+        session()->flash('message', 'Uspešno ste se registrovali');
 
         return redirect('/posts');
     }
